@@ -1,4 +1,13 @@
 # Compiled class file
+*.idea
+target
+*.iml
+\.orig\..*$
+\.orig$
+\.chg\..*$
+\.rej$
+\.conflict\~$
+
 *.class
 
 # Log file

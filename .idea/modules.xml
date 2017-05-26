@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FileTransfer.iml" filepath="$PROJECT_DIR$/.idea/modules/FileTransfer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FileTransfer_main.iml" filepath="$PROJECT_DIR$/.idea/modules/FileTransfer_main.iml" group="FileTransfer" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FileTransfer_test.iml" filepath="$PROJECT_DIR$/.idea/modules/FileTransfer_test.iml" group="FileTransfer" />
+    </modules>
+  </component>
+</project>

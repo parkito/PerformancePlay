@@ -4,7 +4,7 @@ import io.aeron.Subscription
 import io.aeron.samples.SamplesUtil.printStringMessage
 
 class Subscriber {
-    private val subscription: Subscription = AreonHolder.aeron.addSubscription("aeron:udp?endpoint=localhost:40123", 10)
+    private val subscription: Subscription = AreonHolder.aeron.addSubscription(AreonHolder.DRIVER_UDP_ADDRESS, 10)
 
     fun start() {
         while (true) {
@@ -15,5 +15,4 @@ class Subscriber {
 
         }
     }
-
 }

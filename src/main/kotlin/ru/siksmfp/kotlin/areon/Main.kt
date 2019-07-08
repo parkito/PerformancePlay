@@ -10,6 +10,7 @@ fun main(args: Array<String>) {
 
     subscriber.start()
     while (true) {
+        println("Publishing")
         publisher.publish("Hello")
         TimeUnit.SECONDS.sleep(2)
     }

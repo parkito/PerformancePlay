@@ -6,11 +6,8 @@ import io.aeron.driver.MediaDriver
 object AreonHolder {
 
     private val driver = MediaDriver.launchEmbedded()
-    private val context = Aeron.Context();
+    private val context = Aeron.Context().aeronDirectoryName(driver.aeronDirectoryName());
+
     val aeron = Aeron.connect(context);
-
-    init {
-        context.aeronDirectoryName(driver!!.aeronDirectoryName())
-    }
-
+    const val DRIVER_UDP_ADDRESS = "aeron:udp?endpoint=localhost:40123"
 }

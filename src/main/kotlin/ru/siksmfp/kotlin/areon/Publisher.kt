@@ -13,7 +13,5 @@ class Publisher {
         BUFFER.putBytes(0, messageBytes)
 
         publication.offer(BUFFER, 0, messageBytes.size)
-
-        println("Done sending")
     }
 }

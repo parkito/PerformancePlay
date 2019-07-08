@@ -9,9 +9,12 @@ fun main(args: Array<String>) {
     val publisher = Publisher()
 
     subscriber.start()
+
+    var count = 0
     while (true) {
-        println("Publishing")
-        publisher.publish("Hello")
+        val message = "Hello ${count++}"
+        publisher.publish(message)
+        println("Published message $message")
         TimeUnit.SECONDS.sleep(2)
     }
 }

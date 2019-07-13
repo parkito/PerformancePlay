@@ -13,7 +13,7 @@ class Subscriber {
         executor.submit {
             while (true) {
                 try {
-                    subscription.poll(printStringMessage(10), 10)
+                    subscription.poll(printStringMessage(STREAM_ID), Int.MAX_VALUE)
                     continue
                 } catch (ex: Exception) {
                     print("Subscriber error")

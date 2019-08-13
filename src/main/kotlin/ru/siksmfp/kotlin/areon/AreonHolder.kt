@@ -2,8 +2,6 @@ package ru.siksmfp.kotlin.areon
 
 import io.aeron.Aeron
 import io.aeron.driver.MediaDriver
-import io.aeron.samples.SamplesUtil
-import java.util.concurrent.atomic.AtomicBoolean
 
 object AreonHolder {
 
@@ -13,6 +11,4 @@ object AreonHolder {
     val aeron = Aeron.connect(context);
     const val DRIVER_UDP_ADDRESS = "aeron:udp?endpoint=localhost:40123"
     const val STREAM_ID = 10
-
-    val running = AtomicBoolean(true)
 }

@@ -6,40 +6,38 @@ import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.jdbc.support.KeyHolder
 import org.springframework.stereotype.Repository
-import ru.siksmfp.server.blocking.model.Log
+import ru.siksmfp.server.blocking.model.User
 import java.sql.Connection
 import java.sql.ResultSet
 
 @Repository
-class LogRepository(
+class UserRepository(
         @Autowired
         private val jdbcTemplate: JdbcTemplate
-) : GenericRepository<Log>() {
+) : GenericRepository<User>() {
 
     companion object {
-        private const val INSERT_SQL = "INSERT INTO log(client, operation, entityId) VALUES (?,?,?)"
+        private const val INSERT_SQL = "INSERT INTO \"user\"(name, age) VALUES (?,?)"
     }
 
-    private class LogMapper : RowMapper<Log> {
-        override fun mapRow(rs: ResultSet, rowNum: Int): Log? {
-            return Log(
+    private class LogMapper : RowMapper<User> {
+        override fun mapRow(rs: ResultSet, rowNum: Int): User? {
+            return User(
                     id = rs.getLong("id"),
-                    client = rs.getString("client"),
-                    operation = rs.getString("operation"),
-                    entityId = rs.getLong("entityId")
+                    name = rs.getString("name"),
+                    age = rs.getInt("operation")
             )
         }
     }
 
-    override fun save(t: Log): Long {
+    override fun save(t: User): Long {
         val keyHolder: KeyHolder = GeneratedKeyHolder()
 
         jdbcTemplate.update({ connection: Connection ->
             val ps = connection
                     .prepareStatement(INSERT_SQL, arrayOf("id"))
-            ps.setString(1, t.client)
-            ps.setString(2, t.operation)
-            ps.setLong(3, t.entityId)
+            ps.setString(1, t.name)
+            ps.setInt(2, t.age)
             ps
         }, keyHolder)
 
@@ -54,7 +52,7 @@ class LogRepository(
         return jdbcTemplate
     }
 
-    override fun getMapper(): RowMapper<Log> {
+    override fun getMapper(): RowMapper<User> {
         return LogMapper()
     }
 }

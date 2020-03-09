@@ -6,40 +6,40 @@ import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.jdbc.support.KeyHolder
 import org.springframework.stereotype.Repository
-import ru.siksmfp.server.blocking.model.Log
+import ru.siksmfp.server.blocking.model.Message
 import java.sql.Connection
 import java.sql.ResultSet
 
 @Repository
-class LogRepository(
+class MessageRepository(
         @Autowired
         private val jdbcTemplate: JdbcTemplate
-) : GenericRepository<Log>() {
+) : GenericRepository<Message>() {
 
     companion object {
-        private const val INSERT_SQL = "INSERT INTO log(client, operation, entityId) VALUES (?,?,?)"
+        private const val INSERT_SQL = "INSERT INTO \"message\"(\"from\", \"to\", message) VALUES (?,?,?)"
     }
 
-    private class LogMapper : RowMapper<Log> {
-        override fun mapRow(rs: ResultSet, rowNum: Int): Log? {
-            return Log(
+    private class LogMapper : RowMapper<Message> {
+        override fun mapRow(rs: ResultSet, rowNum: Int): Message? {
+            return Message(
                     id = rs.getLong("id"),
-                    client = rs.getString("client"),
-                    operation = rs.getString("operation"),
-                    entityId = rs.getLong("entityId")
+                    from = rs.getLong("from"),
+                    to = rs.getLong("to"),
+                    message = rs.getString("message")
             )
         }
     }
 
-    override fun save(t: Log): Long {
+    override fun save(t: Message): Long {
         val keyHolder: KeyHolder = GeneratedKeyHolder()
 
         jdbcTemplate.update({ connection: Connection ->
             val ps = connection
                     .prepareStatement(INSERT_SQL, arrayOf("id"))
-            ps.setString(1, t.client)
-            ps.setString(2, t.operation)
-            ps.setLong(3, t.entityId)
+            ps.setLong(1, t.from)
+            ps.setLong(2, t.to)
+            ps.setString(3, t.message)
             ps
         }, keyHolder)
 
@@ -54,7 +54,7 @@ class LogRepository(
         return jdbcTemplate
     }
 
-    override fun getMapper(): RowMapper<Log> {
+    override fun getMapper(): RowMapper<Message> {
         return LogMapper()
     }
 }

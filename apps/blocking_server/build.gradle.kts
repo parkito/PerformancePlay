@@ -1,6 +1,7 @@
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import org.gradle.api.JavaVersion.VERSION_11
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 group = "ru.siksmfp.server.blocking"
 version = "0.1.1"
@@ -31,13 +32,17 @@ repositories {
     gradlePluginPortal()
 }
 
-tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+tasks.getByName<BootJar>("bootJar") {
     archiveFileName.set("${archiveBaseName.get()}.${archiveExtension.get()}")
+    copy {
+        from(archiveFileName)
+        into("docker/blocking-server.jar")
+    }
 }
 
 tasks.create("copyJar", Copy::class) {
-    from("build/libs/blocking-server.jar")
-    into("~/Downloads/blocking-server.jar")
+    from("${projectDir}/build/libs/blocking_server.jar")
+    into("docker/")
 }
 
 
@@ -49,6 +54,6 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.create("buildImage", DockerBuildImage::class) {
-
+    inputDir.set(file("docker/"))
     images.add("parkito/blocking-server")
 }

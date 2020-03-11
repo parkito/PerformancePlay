@@ -1,26 +1,26 @@
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+import org.gradle.api.JavaVersion.VERSION_11
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 group = "ru.siksmfp.server.blocking"
 version = "0.1.1"
 
+val springBootVersion = "2.2.5.RELEASE"
+
 plugins {
-    application
-//    id("com.palantir.docker") version "0.25.0"
-//    id("com.palantir.docker-run") version "0.25.0"
     kotlin("jvm") version "1.3.70"
-    id("org.springframework.boot") version "2.2.5.RELEASE"
     kotlin("plugin.spring") version "1.3.61"
+    id("org.springframework.boot") version "2.2.5.RELEASE"
+    id("com.bmuschko.docker-remote-api") version "6.1.4"
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = VERSION_11
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+    implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-data-jdbc:$springBootVersion")
     implementation("org.jsmart:zerocode-tdd-jupiter:1.3.17")
     implementation("org.postgresql:postgresql:42.2.10")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     testCompile("org.junit.jupiter:junit-jupiter-engine:5.4.1")
@@ -28,12 +28,18 @@ dependencies {
 repositories {
     jcenter()
     mavenCentral()
+    gradlePluginPortal()
 }
 
-tasks.withType<BootJar>().configureEach {
-    mainClassName = "ru.siksmfp.server.blocking.MainKt"
-    launchScript()
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    archiveFileName.set("${archiveBaseName.get()}.${archiveExtension.get()}")
 }
+
+tasks.create("copyJar", Copy::class) {
+    from("build/libs/blocking-server.jar")
+    into("~/Downloads/blocking-server.jar")
+}
+
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
@@ -41,20 +47,8 @@ tasks.withType<KotlinCompile> {
         jvmTarget = "11"
     }
 }
-//apply(plugin = "com.palantir.docker")
 
-//docker {
-//    name = "mrkulli/ktdemo:".plus(version)
-//    uri("mrkulli/ktdemo:".plus(version))
-//    tag("name", "ktdemo")
-//    buildArgs(ImmutableMap.of("name", "ktdemo"))
-//    copySpec.from("build").into("build")
-//    pull(true)
-//    setDockerfile(file("Dockerfile"))
-//}
-//
-//dockerRun {
-//    name = "ktdemo"
-//    image = "mrkulli/ktdemo:".plus(version)
-//    ports("8080:8080")
-//}
+tasks.create("buildImage", DockerBuildImage::class) {
+
+    images.add("parkito/blocking-server")
+}

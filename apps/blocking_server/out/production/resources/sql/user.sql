@@ -1,6 +1,0 @@
-CREATE TABLE "user"
-(
-    id   BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    age  INTEGER      NOT NULL
-)

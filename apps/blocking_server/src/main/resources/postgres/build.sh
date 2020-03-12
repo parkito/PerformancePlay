@@ -1,0 +1,1 @@
+docker build . -t parkito/blocking_server_postgres

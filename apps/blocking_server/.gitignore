@@ -14,6 +14,7 @@ classes/
 \.rej$
 \.conflict\~$
 logs/
+docker/blocking_server.jar
 
 *.class
 

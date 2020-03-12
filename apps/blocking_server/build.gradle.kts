@@ -43,6 +43,7 @@ tasks.getByName<BootJar>("bootJar") {
 tasks.create("copyJar", Copy::class) {
     from("${projectDir}/build/libs/blocking_server.jar")
     into("docker/")
+    dependsOn("build")
 }
 
 
@@ -55,5 +56,6 @@ tasks.withType<KotlinCompile> {
 
 tasks.create("buildImage", DockerBuildImage::class) {
     inputDir.set(file("docker/"))
-    images.add("parkito/blocking-server")
+    images.add("parkito/blocking_server")
+    dependsOn("copyJar")
 }

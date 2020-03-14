@@ -16,3 +16,5 @@ services:
       - 9001:9001
     depends_on:
       - postgres
+    volumes:
+    - /tmp/gc:/var/gc

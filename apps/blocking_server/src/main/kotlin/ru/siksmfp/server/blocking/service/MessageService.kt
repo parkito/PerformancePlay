@@ -3,11 +3,10 @@ package ru.siksmfp.server.blocking.service
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import ru.siksmfp.server.blocking.model.Log
 import ru.siksmfp.server.blocking.model.Message
-import ru.siksmfp.server.blocking.repository.LogRepository
 import ru.siksmfp.server.blocking.repository.MessageRepository
 import ru.siksmfp.server.blocking.repository.UserRepository
+import ru.siksmfp.server.blocking.service.Operation.SAVE_MESSAGE
 
 @Service
 class MessageService(
@@ -15,7 +14,7 @@ class MessageService(
         private val messageRepository: MessageRepository,
 
         @Autowired
-        private val logRepository: LogRepository,
+        private val logService: LogService,
 
         @Autowired
         private val userRepository: UserRepository
@@ -25,13 +24,7 @@ class MessageService(
     fun save(message: Message): Long {
         val id = messageRepository.save(message)
         val user = userRepository.find(message.from) ?: throw IllegalStateException("User ${message.from} not fond")
-        val log = Log(
-                id = null,
-                client = user.name + user.id,
-                operation = "SAVE MESSAGE",
-                entityId = id
-        )
-        logRepository.save(log)
+        logService.log("${user.name} ${user.id}", SAVE_MESSAGE, id)
         return id
     }
 

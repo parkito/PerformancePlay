@@ -2,6 +2,7 @@ package ru.siksmfp.server.blocking.controller
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -18,5 +19,15 @@ class MessageController(
     @PostMapping
     fun save(message: Message): ResponseEntity<Long> {
         return ResponseEntity.ok(messageService.save(message))
+    }
+
+    @GetMapping
+    fun find(id: Long): ResponseEntity<Message> {
+        return ResponseEntity.ok(messageService.findById(id))
+    }
+
+    @GetMapping("/all")
+    fun findAll(): ResponseEntity<List<Message>> {
+        return ResponseEntity.ok(messageService.findAll())
     }
 }

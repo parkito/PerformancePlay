@@ -1,0 +1,17 @@
+{
+  "scenarioName": "Create user case",
+  "steps": [
+    {
+      "name": "Create user test",
+      "url": "/api/v1/user",
+      "operation": "post",
+      "request": {
+        "name": "name1",
+        "age": "1"
+      },
+      "assertions": {
+        "status": 200
+      }
+    }
+  ]
+}

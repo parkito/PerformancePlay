@@ -4,10 +4,12 @@
     {
       "name": "Create user test",
       "url": "/api/v1/user",
-      "operation": "post",
+      "operation": "POST",
       "request": {
-        "name": "name1",
-        "age": "1"
+        "body": {
+          "name": "name1",
+          "age": 1
+        }
       },
       "assertions": {
         "status": 200

@@ -20,11 +20,14 @@ java.sourceCompatibility = VERSION_11
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc:$springBootVersion")
-    implementation("org.jsmart:zerocode-tdd-jupiter:1.3.17")
+    testImplementation("org.jsmart:zerocode-tdd-jupiter:1.3.17")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.3")
     implementation("org.postgresql:postgresql:42.2.10")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    testCompile("org.junit.jupiter:junit-jupiter-engine:5.4.1")
+    testImplementation("com.google.guava:guava:28.2-jre")
+    testImplementation("org.jsmart:zerocode-tdd:1.3.17")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.4.1")
 }
 repositories {
     jcenter()

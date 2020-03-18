@@ -17,4 +17,4 @@ services:
     depends_on:
       - postgres
     volumes:
-    - /tmp/gc:/var/gc
+    - /tmp/log:/tmp/log

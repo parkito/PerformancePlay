@@ -5,6 +5,7 @@ gradle/
 classes/
 /*/gradle/
 /target/
+out/
 /*/target/
 /build/
 /*/build/

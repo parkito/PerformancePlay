@@ -26,6 +26,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     testImplementation("com.google.guava:guava:28.2-jre")
+    testImplementation("com.h2database:h2:1.4.200")
     testImplementation("org.jsmart:zerocode-tdd:1.3.17")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.4.1")
 }

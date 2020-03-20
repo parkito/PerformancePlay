@@ -1,4 +1,4 @@
-package ru.siksmfp.server.blocking.config
+package ru.siksmfp.server.blocking.performance
 
 import org.jsmart.zerocode.core.domain.JsonTestCase
 import org.jsmart.zerocode.core.domain.TargetEnv

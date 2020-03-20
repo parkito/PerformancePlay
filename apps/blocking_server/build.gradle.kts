@@ -30,8 +30,8 @@ dependencies {
     }
     testImplementation("com.google.guava:guava:28.2-jre")
     testImplementation("com.h2database:h2:1.4.200")
-    testImplementation("org.jsmart:zerocode-tdd:1.3.17")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.4.1")
+//    testImplementation("org.jsmart:zerocode-tdd:1.3.17")
+//    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.4.1")
 }
 repositories {
     jcenter()
@@ -53,6 +53,9 @@ tasks.create("copyJar", Copy::class) {
     dependsOn("build")
 }
 
+tasks.test {
+    useJUnitPlatform()
+}
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {

@@ -1,6 +1,6 @@
-TRUNCATE "user" RESTART IDENTITY;
+TRUNCATE table "user";
 
-TRUNCATE "message" RESTART IDENTITY;
+TRUNCATE table "message";
 
-TRUNCATE "log" RESTART IDENTITY;
+TRUNCATE table "log";
 

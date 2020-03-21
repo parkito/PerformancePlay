@@ -5,9 +5,9 @@ import org.springframework.jdbc.core.RowMapper
 
 abstract class GenericRepository<T> {
 
-    protected val COUNT_SQL = "SELECT COUNT(1) FROM ${this.getTableName()}"
-    protected val FIND_BY_ID_SQL = "SELECT * FROM ${this.getTableName()} WHERE id = ?"
-    protected val FIND_ALL_SQL = "SELECT * FROM ${this.getTableName()}"
+    private val COUNT_SQL = "SELECT COUNT(1) FROM ${this.getTableName()}"
+    private val FIND_BY_ID_SQL = "SELECT * FROM ${this.getTableName()} WHERE id = ?"
+    private val FIND_ALL_SQL = "SELECT * FROM ${this.getTableName()}"
 
     abstract fun getTableName(): String
 

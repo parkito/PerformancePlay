@@ -2,11 +2,7 @@ package ru.siksmfp.server.blocking.controller
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import ru.siksmfp.server.blocking.model.User
 import ru.siksmfp.server.blocking.service.UserService
 
@@ -21,8 +17,8 @@ class UserController(
         return ResponseEntity.ok(userService.save(user))
     }
 
-    @GetMapping
-    fun find(id: Long): ResponseEntity<User> {
+    @GetMapping("/{id}")
+    fun find(@PathVariable("id") id: Long): ResponseEntity<User> {
         return ResponseEntity.ok(userService.find(id))
     }
 }

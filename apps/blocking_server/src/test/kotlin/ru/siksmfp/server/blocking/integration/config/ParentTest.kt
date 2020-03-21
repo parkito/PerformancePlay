@@ -21,7 +21,7 @@ import javax.sql.DataSource
 @SpringBootTest
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension::class)
-@Sql(scripts = ["/sql/reset.sql"], executionPhase = AFTER_TEST_METHOD)
+//@Sql(scripts = ["/sql/reset.sql"], executionPhase = AFTER_TEST_METHOD)
 class ParentTest {
     @Autowired
     private lateinit var dataSource: DataSource
@@ -46,7 +46,7 @@ class ParentTest {
     fun beforeEach() {
         if (!isInitialized) {
             val populator = ResourceDatabasePopulator()
-            populator.addScript(ClassPathResource("/postgres/init.sql"))
+            populator.addScript(ClassPathResource("/sql/init-test.sql"))
             populator.execute(dataSource)
             isInitialized = true
         }

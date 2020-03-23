@@ -45,7 +45,7 @@ class UserRepository(
     }
 
     override fun getTableName(): String {
-        return "log"
+        return "user"
     }
 
     override fun jdbcTemplate(): JdbcTemplate {

@@ -20,7 +20,6 @@ java.sourceCompatibility = VERSION_11
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc:$springBootVersion")
-    testImplementation("org.jsmart:zerocode-tdd-jupiter:1.3.17")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.3")
     implementation("org.postgresql:postgresql:42.2.10")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -28,10 +27,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
         exclude("com.vaadin.external.google", "android-json")
     }
-    testImplementation("com.google.guava:guava:28.2-jre")
     testImplementation("com.h2database:h2:1.4.200")
-//    testImplementation("org.jsmart:zerocode-tdd:1.3.17")
-//    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.4.1")
 }
 repositories {
     jcenter()

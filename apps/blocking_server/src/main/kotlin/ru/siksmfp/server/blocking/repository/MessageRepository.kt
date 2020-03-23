@@ -47,7 +47,7 @@ class MessageRepository(
     }
 
     override fun getTableName(): String {
-        return "log"
+        return "message"
     }
 
     override fun jdbcTemplate(): JdbcTemplate {

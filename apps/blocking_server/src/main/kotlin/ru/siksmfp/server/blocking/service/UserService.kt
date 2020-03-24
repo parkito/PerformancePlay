@@ -20,7 +20,7 @@ class UserService(
     fun save(user: User): Long {
         user.id = null
         val id = userRepository.save(user)
-        logService.log("${user.name} ${user.id}", SAVE_USER, id)
+        logService.log(user.name, SAVE_USER, id)
         return id
     }
 

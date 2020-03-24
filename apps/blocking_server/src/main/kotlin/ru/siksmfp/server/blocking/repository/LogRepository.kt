@@ -17,7 +17,7 @@ class LogRepository(
 ) : GenericRepository<Log>() {
 
     companion object {
-        private const val INSERT_SQL = "INSERT INTO log(client, operation, entityId) VALUES (?,?,?)"
+        private const val INSERT_SQL = "INSERT INTO LOG(client, operation, entityId) VALUES (?,?,?)"
     }
 
     private class LogMapper : RowMapper<Log> {
@@ -47,7 +47,7 @@ class LogRepository(
     }
 
     override fun getTableName(): String {
-        return "log"
+        return "LOG"
     }
 
     override fun jdbcTemplate(): JdbcTemplate {

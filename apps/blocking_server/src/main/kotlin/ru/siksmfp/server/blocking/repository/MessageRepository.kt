@@ -17,7 +17,7 @@ class MessageRepository(
 ) : GenericRepository<Message>() {
 
     companion object {
-        private const val INSERT_SQL = "INSERT INTO \"message\"(\"from\", \"to\", message) VALUES (?,?,?)"
+        private const val INSERT_SQL = "INSERT INTO MESSAGE(\"from\", \"to\", message) VALUES (?,?,?)"
     }
 
     private class LogMapper : RowMapper<Message> {
@@ -47,7 +47,7 @@ class MessageRepository(
     }
 
     override fun getTableName(): String {
-        return "message"
+        return "MESSAGE"
     }
 
     override fun jdbcTemplate(): JdbcTemplate {

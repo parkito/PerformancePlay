@@ -1,19 +1,19 @@
-CREATE TABLE "user"
+CREATE TABLE USER
 (
     id   BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     age  INTEGER      NOT NULL
 );
 
-CREATE TABLE "message"
+CREATE TABLE MESSAGE
 (
     id      BIGSERIAL PRIMARY KEY,
-    "from"  BIGINT        NOT NULL REFERENCES "user" (id),
-    "to"    BIGINT        NOT NULL REFERENCES "user" (id),
+    "from"  BIGINT        NOT NULL REFERENCES USER (id),
+    "to"    BIGINT        NOT NULL REFERENCES USER (id),
     message VARCHAR(1024) NOT NULL
 );
 
-CREATE TABLE "log"
+CREATE TABLE LOG
 (
     id        BIGSERIAL PRIMARY KEY,
     client    VARCHAR(255) NOT NULL,

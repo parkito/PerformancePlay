@@ -5,19 +5,20 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.jdbc.support.KeyHolder
+import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
 import ru.siksmfp.server.blocking.model.User
 import java.sql.Connection
 import java.sql.ResultSet
 
-@Repository
+@Component
 class UserRepository(
         @Autowired
         private val jdbcTemplate: JdbcTemplate
 ) : GenericRepository<User>() {
 
     companion object {
-        private const val INSERT_SQL = "INSERT INTO \"user\"(name, age) VALUES (?,?)"
+        private const val INSERT_SQL = "INSERT INTO USER(name, age) VALUES (?,?)"
     }
 
     private class LogMapper : RowMapper<User> {
@@ -25,7 +26,7 @@ class UserRepository(
             return User(
                     id = rs.getLong("id"),
                     name = rs.getString("name"),
-                    age = rs.getInt("operation")
+                    age = rs.getInt("age")
             )
         }
     }
@@ -45,7 +46,7 @@ class UserRepository(
     }
 
     override fun getTableName(): String {
-        return "user"
+        return "USER"
     }
 
     override fun jdbcTemplate(): JdbcTemplate {

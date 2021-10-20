@@ -5,7 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicLong
 
 @SpringBootApplication
@@ -25,6 +27,8 @@ class AppService {
     }
 
     fun get(): Long {
+        val newSingleThreadExecutor = Executors.newSingleThreadExecutor()
+        newSingleThreadExecutor.execute({ Thread.sleep(9000) })
         return counter.get()
     }
 
@@ -35,14 +39,19 @@ class AppRest(
     private val appService: AppService
 ) {
 
-    @GetMapping
+    @PostMapping("/counter")
+    fun inc() {
+        return appService.inc()
+    }
+
+    @GetMapping("/counter")
     fun getInc(): Long {
         return appService.get()
     }
 }
 
 fun main(args: Array<String>) {
-    runApplication<Service>(*args)
+    runApplication<AppMain>(*args)
 }
 
 

@@ -18,20 +18,26 @@ class Router(
     }
 
     @Bean
-    fun resumeRouter(service: ReactiveHandler) = router {
+    fun webRouter(handler: ReactiveHandler) = router {
         API.nest {
-            GET("/$USER_PATH/{id}", service::findById)
+            GET("/$USER_PATH/{id}", handler::findById)
         }
     }
 }
 
 @Component
-class ReactiveHandler {
+class ReactiveHandler(
+    private val service: ReactiveService
+) {
 
     fun findById(req: ServerRequest): Mono<ServerResponse> {
         val id = req.pathVariable("id")
         return ServerResponse.ok().body(
             BodyInserters.fromProducer(Mono.just(UserDao(1, "name", "pass", 25)), UserDao::class.java)
         )
+    }
+
+    fun save(req: ServerRequest): Mono<ServerResponse> {
+
     }
 }

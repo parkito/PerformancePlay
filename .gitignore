@@ -19,6 +19,7 @@ classes/
 gradlew
 gradlew.bat
 *.class
+reactive_user/src/main/resources/mongo
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

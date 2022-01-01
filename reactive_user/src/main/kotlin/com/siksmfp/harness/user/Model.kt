@@ -14,7 +14,7 @@ data class UserDao(
 @Document("user")
 data class UserMongo(
     @Id
-    val id: Long,
+    val id: String,
     val username: String,
     val password: String,
     val age: Int

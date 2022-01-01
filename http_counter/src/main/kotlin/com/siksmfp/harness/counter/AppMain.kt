@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicLong
 
 @SpringBootApplication
@@ -27,11 +26,8 @@ class AppService {
     }
 
     fun get(): Long {
-        val newSingleThreadExecutor = Executors.newSingleThreadExecutor()
-        newSingleThreadExecutor.execute({ Thread.sleep(9000) })
         return counter.get()
     }
-
 }
 
 @RestController

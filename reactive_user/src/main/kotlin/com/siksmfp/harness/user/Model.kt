@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
 data class UserDao(
-    val id: Long,
+    val id: String? = null,
     val username: String,
     val password: String,
     val age: Int
@@ -14,7 +14,7 @@ data class UserDao(
 @Document("user")
 data class UserMongo(
     @Id
-    val id: String,
+    val id: String? = null,
     val username: String,
     val password: String,
     val age: Int

@@ -9,7 +9,7 @@ class AppClient(
     private val client: WebClient,
 ) {
 
-    fun create(userDao: UserDao): Mono<String?> {
+    fun create(userDao: UserDao): Mono<String> {
         return client.post()
             .uri(USER_PATH)
             .body(fromValue(userDao))
@@ -18,4 +18,27 @@ class AppClient(
             .mapNotNull { it.body?.id }
     }
 
+    fun find(id: String): Mono<UserDao> {
+        return client.get()
+            .uri {
+                it.path(USER_PATH)
+                    .pathSegment(id)
+                    .build()
+            }
+            .retrieve()
+            .toEntity(UserDao::class.java)
+            .mapNotNull { it.body }
+    }
+
+    fun delete(id: String): Mono<Void> {
+        return client.delete()
+            .uri {
+                it.path(USER_PATH)
+                    .pathSegment(id)
+                    .build()
+            }
+            .retrieve()
+            .toEntity(Void::class.java)
+            .mapNotNull { it.body }
+    }
 }

@@ -1,34 +1,72 @@
 package com.siksmfp.harness.user
 
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.springframework.http.HttpStatus.NOT_FOUND
+import org.springframework.web.reactive.function.client.WebClientResponseException.NotFound
 import reactor.test.StepVerifier
+import java.util.concurrent.atomic.AtomicReference
 
 class ControllerTest : IntegrationParent() {
 
     @Test
-    fun one() {
-//        client
-//            .get().uri("$API/$USER_PATH/1")
-//            .accept(APPLICATION_JSON)
-//            .exchange()
-//            .expectStatus().isOk
-//            .expectBody(UserDao::class.java)
-//            .value {
-//                Assertions.assertEquals(1, it.id)
-//            }
+    fun saveOne() {
+        val createMono = client.create(
+            UserDao(null, "name1", "pass1", 10)
+        )
+
+        StepVerifier.create(createMono)
+            .assertNext {
+                assertNotNull(it)
+                assertTrue(it!!.isNotEmpty())
+            }.verifyComplete()
     }
 
     @Test
-    fun saveOne() {
-        StepVerifier.create(
-            client.create(
-                UserDao(null, "name1", "pass", 10)
-            )
-        ).consumeNextWith {
-            assertNotNull(it)
-            assertTrue(it!!.isNotEmpty())
-        }.verifyComplete()
+    fun saveAndRetrieveOne() {
+        val toSave = UserDao(null, "name1", "pass", 10)
+        val action = client.create(toSave)
+            .flatMap {
+                client.find(it)
+            }
+
+        StepVerifier.create(action)
+            .assertNext {
+                assertEquals(it.username, toSave.username)
+                assertEquals(it.password, toSave.password)
+                assertEquals(it.age, toSave.age)
+            }.verifyComplete()
+    }
+
+    @Test
+    fun saveAndDelete() {
+        val toSave = UserDao(null, "name1", "pass", 10)
+        val create = client.create(toSave)
+            .doOnError { fail("Create: $it") }
+
+        val id = AtomicReference("")
+        val find = create.flatMap {
+            client.find(it)
+        }.doOnNext {
+            assertEquals(it.username, toSave.username)
+            assertEquals(it.password, toSave.password)
+            assertEquals(it.age, toSave.age)
+        }.doOnError {
+            fail("Find: $it")
+        }.doOnNext { id.set(it.id) }
+
+        val delete = find.flatMap {
+            client.delete(it.id!!)
+        }.doOnError { fail("Delete: $it") }
+
+        val findAgain = client.find(id.get())
+
+        StepVerifier.create(delete).verifyComplete()
+        StepVerifier.create(findAgain)
+            .consumeErrorWith {
+                assertTrue(it is NotFound)
+                it as NotFound
+                assertEquals(NOT_FOUND, it.statusCode)
+            }.verify()
     }
 }

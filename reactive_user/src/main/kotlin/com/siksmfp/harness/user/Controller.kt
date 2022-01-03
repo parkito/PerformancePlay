@@ -42,7 +42,12 @@ class ReactiveHandler(
     }
 
     fun deleteById(req: ServerRequest): Mono<ServerResponse> {
-        return ServerResponse.accepted().build()
+        val id = req.pathVariable("id")
+        return service.deleteUserById(id)
+            .flatMap { ServerResponse.notFound().build() }
+            .switchIfEmpty(
+                ServerResponse.ok().build()
+            )
     }
 
     fun save(req: ServerRequest): Mono<ServerResponse> {

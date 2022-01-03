@@ -1,15 +1,13 @@
 package com.siksmfp.harness.user
 
-import com.siksmfp.harness.user.Router.Companion.USER_PATH
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.BodyInserters.fromProducer
+import org.springframework.web.reactive.function.BodyInserters.fromValue
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.router
 import reactor.core.publisher.Mono
-import java.net.URI
 
 @Configuration
 class Router(
@@ -22,8 +20,9 @@ class Router(
     @Bean
     fun webRouter(handler: ReactiveHandler) = router {
         API.nest {
-            GET("/$USER_PATH/{id}", handler::findById)
-            POST("/$USER_PATH", handler::save)
+            GET("$USER_PATH/{id}", handler::findById)
+            POST(USER_PATH, handler::save)
+            DELETE("$USER_PATH/{id}", handler::deleteById)
         }
     }
 }
@@ -35,16 +34,23 @@ class ReactiveHandler(
 
     fun findById(req: ServerRequest): Mono<ServerResponse> {
         val id = req.pathVariable("id")
-        return ServerResponse.ok().body(
-            fromProducer(service.findUserById(id), UserDao::class.java)
-        )
+        return service.findUserById(id)
+            .flatMap { ServerResponse.ok().body(fromValue(it)) }
+            .switchIfEmpty(
+                ServerResponse.notFound().build()
+            )
+    }
+
+    fun deleteById(req: ServerRequest): Mono<ServerResponse> {
+        return ServerResponse.accepted().build()
     }
 
     fun save(req: ServerRequest): Mono<ServerResponse> {
         return req.bodyToMono(UserDao::class.java)
-            .flatMap { service.saveUser(it) }
+            .flatMap(service::saveUser)
             .flatMap {
-                ServerResponse.created(URI.create("/$USER_PATH/${it.id}")).build()
+                ServerResponse.ok()
+                    .body(fromValue(it))
             }
     }
 }

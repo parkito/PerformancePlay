@@ -6,9 +6,9 @@ spring:
     web-application-type: REACTIVE
   data:
     mongodb:
-#      username: root
-#      password: password
-#      host: localhost
-#      port: 27017
-#      database: db
       uri: mongodb://root:password@localhost:27017/admin
+
+
+app:
+  host: localhost
+  port: 8787

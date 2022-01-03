@@ -10,19 +10,23 @@ class ReactiveService(
 ) {
 
     fun findUserById(id: String): Mono<UserDao> {
-        return repository.findById(id).map(mapper::toUserDto).switchIfEmpty(
-            Mono.error(
-                RuntimeException("User with id $id not found")
+        return repository.findById(id)
+            .map(mapper::toUserDto)
+            .switchIfEmpty(
+                Mono.error(
+                    RuntimeException("User with id $id not found")
+                )
             )
-        )
     }
 
     fun saveUser(userDao: UserDao): Mono<UserDao> {
-        return repository.save(mapper.toUserDoc(userDao)).map(mapper::toUserDto).switchIfEmpty(
-            Mono.error(
-                RuntimeException("User with id ${userDao.id} was not saved")
+        return repository.save(mapper.toUserDoc(userDao))
+            .map(mapper::toUserDto)
+            .switchIfEmpty(
+                Mono.error(
+                    RuntimeException("User with id ${userDao.id} was not saved")
+                )
             )
-        )
     }
 }
 

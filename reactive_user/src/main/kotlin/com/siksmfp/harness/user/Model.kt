@@ -10,7 +10,6 @@ data class UserDao(
     val age: Int
 )
 
-
 @Document("user")
 data class UserMongo(
     @Id

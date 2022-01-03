@@ -18,6 +18,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:mongodb:1.16.2")
+    testImplementation("io.projectreactor:reactor-test:3.4.13")
 }
 
 tasks.withType<KotlinCompile> {

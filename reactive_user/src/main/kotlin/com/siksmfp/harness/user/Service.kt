@@ -1,6 +1,6 @@
 package com.siksmfp.harness.user
 
-import org.slf4j.LoggerFactory
+import org.slf4j.LoggerFactory.getLogger
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
@@ -11,39 +11,25 @@ class ReactiveService(
 ) {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(this::class.java)
+        @JvmStatic
+        private val logger = getLogger(this::class.java)
     }
 
-    fun findUserById(id: String): Mono<UserDao> {
+    fun findById(id: String): Mono<UserDao> {
         logger.info("find by {}", id)
         return repository.findById(id)
             .map(mapper::toUserDto)
-            .switchIfEmpty(
-                Mono.error(
-                    RuntimeException("User with id $id not found")
-                )
-            )
     }
 
-    fun deleteUserById(id: String): Mono<Void> {
+    fun delete(id: String): Mono<Void> {
         logger.info("delete by {}", id)
         return repository.deleteById(id)
-            .flatMap {
-                Mono.error(
-                    RuntimeException("User with id $id was not deleted")
-                )
-            }
     }
 
-    fun saveUser(userDao: UserDao): Mono<UserDao> {
+    fun save(userDao: UserDao): Mono<UserDao> {
         logger.info("saving {}", userDao)
         return repository.save(mapper.toUserDoc(userDao))
             .map(mapper::toUserDto)
-            .switchIfEmpty(
-                Mono.error(
-                    RuntimeException("User with id ${userDao.id} was not saved")
-                )
-            )
     }
 }
 

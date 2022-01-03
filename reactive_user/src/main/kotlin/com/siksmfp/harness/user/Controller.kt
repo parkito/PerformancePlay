@@ -3,7 +3,6 @@ package com.siksmfp.harness.user
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.BodyInserters.fromValue
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.router
@@ -29,33 +28,47 @@ class Router(
 
 @Component
 class ReactiveHandler(
-    private val service: ReactiveService
+    private val service: ReactiveService, private val rValidator: RequestExtractor
 ) {
 
     fun findById(req: ServerRequest): Mono<ServerResponse> {
-        val id = req.pathVariable("id")
-        return service.findUserById(id)
-            .flatMap { ServerResponse.ok().body(fromValue(it)) }
+        val id = rValidator.validateId(req)
+        if (id.isFailed()) {
+            return validationError(ErredResponse(id.err!!))
+        }
+        return service.findById(id.validated)
+            .flatMap { ok(it) }
             .switchIfEmpty(
-                ServerResponse.notFound().build()
+                notFound(ErredResponse("User with id=${id.validated} is not found"))
             )
     }
 
     fun deleteById(req: ServerRequest): Mono<ServerResponse> {
         val id = req.pathVariable("id")
-        return service.deleteUserById(id)
-            .flatMap { ServerResponse.notFound().build() }
-            .switchIfEmpty(
-                ServerResponse.ok().build()
-            )
+        return service.delete(id).flatMap {
+            notFound(ErredResponse("User with id=$id is not found"))
+        }.switchIfEmpty(ok())
     }
 
     fun save(req: ServerRequest): Mono<ServerResponse> {
-        return req.bodyToMono(UserDao::class.java)
-            .flatMap(service::saveUser)
-            .flatMap {
-                ServerResponse.ok()
-                    .body(fromValue(it))
-            }
+        return req.bodyToMono(UserDao::class.java).flatMap(service::save).flatMap { ok(it) }
     }
+}
+
+@Component
+class RequestExtractor {
+    fun validateId(req: ServerRequest): ValidationResult<String> {
+        val id = req.pathVariables()["id"]
+        return if (id == null) {
+            ValidationResult("id variable is not specified in the request", "")
+        } else {
+            ValidationResult(null, id)
+        }
+    }
+}
+
+data class ValidationResult<T>(
+    val err: String?, val validated: T
+) {
+    fun isFailed(): Boolean = err != null
 }

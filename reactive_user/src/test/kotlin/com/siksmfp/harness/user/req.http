@@ -1,0 +1,15 @@
+GET http://localhost:8787/api/user/61d2ab72b54d1f51f2ec2dad
+Accept: application/json
+
+
+###
+POST http://localhost:8787/api/user
+Content-Type: application/json
+
+{
+  "username": "name1",
+  "password": "pass1",
+  "age": 10
+}
+
+

@@ -1,8 +1,10 @@
 package com.siksmfp.harness.user
 
 import org.slf4j.LoggerFactory.getLogger
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Service
@@ -30,6 +32,15 @@ class ReactiveService(
         logger.info("saving {}", userDao)
         return repository.save(mapper.toUserDoc(userDao))
             .map(mapper::toUserDto)
+    }
+
+    fun findAll(page: PageRequest): Flux<UserDao> {
+        return repository.findAllBy(page)
+            .map(mapper::toUserDto)
+    }
+
+    fun count(): Mono<Long> {
+        return repository.count()
     }
 }
 

@@ -2,11 +2,13 @@ package com.siksmfp.harness.user
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.router
 import reactor.core.publisher.Mono
+import kotlin.Int.Companion.MAX_VALUE
 
 @Configuration
 class Router(
@@ -19,6 +21,8 @@ class Router(
     @Bean
     fun webRouter(handler: ReactiveHandler) = router {
         API.nest {
+            GET(USER_PATH, handler::findAll)
+            GET("$USER_PATH/counter", handler::count)
             GET("$USER_PATH/{id}", handler::findById)
             POST(USER_PATH, handler::save)
             DELETE("$USER_PATH/{id}", handler::deleteById)
@@ -41,6 +45,17 @@ class ReactiveHandler(
             .switchIfEmpty(
                 notFound(ErredResponse("User with id=${id.validated} is not found"))
             )
+    }
+
+    fun findAll(req: ServerRequest): Mono<ServerResponse> {
+        val page = req.pathVariables()["page"]?.toInt() ?: 0
+        val size = req.pathVariables()["page"]?.toInt() ?: MAX_VALUE
+        return ok(service.findAll(PageRequest.of(page, size)))
+    }
+
+    fun count(req: ServerRequest): Mono<ServerResponse> {
+        return service.count()
+            .flatMap { ok(it) }
     }
 
     fun deleteById(req: ServerRequest): Mono<ServerResponse> {
